@@ -1,18 +1,26 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const bodyparser=require("body-parser");
+const bodyParser = require('body-parser');
 require('dotenv').config(); // Load environment variables
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
+
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASS:', process.env.DB_PASS);
+console.log('DB_NAME:', process.env.DB_NAME);
 
 // Create a database connection using environment variables
+
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME
+  host: process.env.DB_HOST ||'localhost',
+  user: process.env.DB_USER ||'root',
+  password: process.env.DB_PASS ||'Ram@1234#',
+  database: process.env.DB_NAME ||'flashcards',
 });
 
 db.connect((err) => {
@@ -55,5 +63,5 @@ app.delete('/api/flashcards/:id', (req, res) => {
 // Remove the duplicate PUT route
 // app.put('/api/flashcards/:id', (req, res) => { ... });
 
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 50000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
